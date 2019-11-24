@@ -1,0 +1,25 @@
+type User {
+  id: ID! @id
+  avatar:String
+  username: String! @unique
+  email: String! @unique
+  name: String! 
+  loginSecret:String
+  pets:[Pet!]! @relation(name:"PetsOfUser", onDelete:CASCADE)
+  createdAt:DateTime! @createdAt
+  updatedAt:DateTime! @updatedAt
+}
+
+type Pet{
+  id:ID! @id
+  user: User @relation(name: "PetsOfUser")
+  name:String! @unique
+  age: String! @unique
+  weight:String
+  height:String
+  species:String! @unique
+  device:String! 
+  createAt:DateTime! @createdAt
+  updateAt:DateTime! @updatedAt
+  class:String
+}

@@ -1,0 +1,6 @@
+endpoint: https://eu1.prisma.sh/dkxltks25-26db96/petstart/dev
+datamodel: datamodel.prisma
+
+generate:
+  - generator: javascript-client
+    output: ./generated/prisma-client/

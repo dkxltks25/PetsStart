@@ -1,0 +1,25 @@
+type User {
+  id: ID! 
+  avatar:String
+  username: String! 
+  email: String! 
+  fullname: String! 
+  loginSecret:String
+  pets:[Pet!]! 
+  createdAt:String
+  updatedAt:String 
+}
+
+type Pet{
+  id:ID! 
+  user: User 
+  name:String! 
+  age: String!
+  weight:String
+  height:String
+  device:String! 
+  species:String! 
+  createdAt:String
+  updatedAt:String
+  class:String
+}

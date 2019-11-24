@@ -1,0 +1,11 @@
+type Mutation{
+    registerPet(
+        name:String!,
+        age:String!,
+        species:String!,
+        weight:String,
+        height:String,
+        userId:String!,
+        device:String
+    ):Boolean! 
+}
