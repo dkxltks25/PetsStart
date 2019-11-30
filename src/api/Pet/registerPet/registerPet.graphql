@@ -3,9 +3,10 @@ type Mutation{
         name:String!,
         age:String!,
         species:String!,
-        weight:String,
-        height:String,
-        userId:String!,
-        device:String
+        weight:String!,
+        height:String!,
+        device:String!,
+        sex:String!,
+
     ):Boolean! 
 }

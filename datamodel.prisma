@@ -2,6 +2,7 @@ type User {
   id: ID! @id
   avatar:String
   username: String! @unique
+  password:String! @unique
   email: String! @unique
   name: String! 
   loginSecret:String
@@ -22,4 +23,6 @@ type Pet{
   createAt:DateTime! @createdAt
   updateAt:DateTime! @updatedAt
   class:String
+  sex:String!
+  
 }

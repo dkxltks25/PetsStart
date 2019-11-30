@@ -160,7 +160,9 @@ export type PetOrderByInput =
   | "updateAt_ASC"
   | "updateAt_DESC"
   | "class_ASC"
-  | "class_DESC";
+  | "class_DESC"
+  | "sex_ASC"
+  | "sex_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -169,6 +171,8 @@ export type UserOrderByInput =
   | "avatar_DESC"
   | "username_ASC"
   | "username_DESC"
+  | "password_ASC"
+  | "password_DESC"
   | "email_ASC"
   | "email_DESC"
   | "name_ASC"
@@ -333,6 +337,20 @@ export interface PetWhereInput {
   class_not_starts_with?: Maybe<String>;
   class_ends_with?: Maybe<String>;
   class_not_ends_with?: Maybe<String>;
+  sex?: Maybe<String>;
+  sex_not?: Maybe<String>;
+  sex_in?: Maybe<String[] | String>;
+  sex_not_in?: Maybe<String[] | String>;
+  sex_lt?: Maybe<String>;
+  sex_lte?: Maybe<String>;
+  sex_gt?: Maybe<String>;
+  sex_gte?: Maybe<String>;
+  sex_contains?: Maybe<String>;
+  sex_not_contains?: Maybe<String>;
+  sex_starts_with?: Maybe<String>;
+  sex_not_starts_with?: Maybe<String>;
+  sex_ends_with?: Maybe<String>;
+  sex_not_ends_with?: Maybe<String>;
   AND?: Maybe<PetWhereInput[] | PetWhereInput>;
   OR?: Maybe<PetWhereInput[] | PetWhereInput>;
   NOT?: Maybe<PetWhereInput[] | PetWhereInput>;
@@ -362,6 +380,7 @@ export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   avatar?: Maybe<String>;
   username: String;
+  password: String;
   email: String;
   name: String;
   loginSecret?: Maybe<String>;
@@ -376,6 +395,7 @@ export interface PetUpdateManyMutationInput {
   species?: Maybe<String>;
   device?: Maybe<String>;
   class?: Maybe<String>;
+  sex?: Maybe<String>;
 }
 
 export interface PetSubscriptionWhereInput {
@@ -399,6 +419,7 @@ export interface PetCreateInput {
   species: String;
   device: String;
   class?: Maybe<String>;
+  sex: String;
 }
 
 export interface PetUpdateManyDataInput {
@@ -409,6 +430,7 @@ export interface PetUpdateManyDataInput {
   species?: Maybe<String>;
   device?: Maybe<String>;
   class?: Maybe<String>;
+  sex?: Maybe<String>;
 }
 
 export interface UserCreateOneWithoutPetsInput {
@@ -545,6 +567,20 @@ export interface PetScalarWhereInput {
   class_not_starts_with?: Maybe<String>;
   class_ends_with?: Maybe<String>;
   class_not_ends_with?: Maybe<String>;
+  sex?: Maybe<String>;
+  sex_not?: Maybe<String>;
+  sex_in?: Maybe<String[] | String>;
+  sex_not_in?: Maybe<String[] | String>;
+  sex_lt?: Maybe<String>;
+  sex_lte?: Maybe<String>;
+  sex_gt?: Maybe<String>;
+  sex_gte?: Maybe<String>;
+  sex_contains?: Maybe<String>;
+  sex_not_contains?: Maybe<String>;
+  sex_starts_with?: Maybe<String>;
+  sex_not_starts_with?: Maybe<String>;
+  sex_ends_with?: Maybe<String>;
+  sex_not_ends_with?: Maybe<String>;
   AND?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
   OR?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
   NOT?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
@@ -554,6 +590,7 @@ export interface UserCreateWithoutPetsInput {
   id?: Maybe<ID_Input>;
   avatar?: Maybe<String>;
   username: String;
+  password: String;
   email: String;
   name: String;
   loginSecret?: Maybe<String>;
@@ -574,6 +611,7 @@ export interface PetUpdateInput {
   species?: Maybe<String>;
   device?: Maybe<String>;
   class?: Maybe<String>;
+  sex?: Maybe<String>;
 }
 
 export interface PetUpdateWithWhereUniqueWithoutUserInput {
@@ -584,6 +622,7 @@ export interface PetUpdateWithWhereUniqueWithoutUserInput {
 export interface UserUpdateInput {
   avatar?: Maybe<String>;
   username?: Maybe<String>;
+  password?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
   loginSecret?: Maybe<String>;
@@ -593,6 +632,7 @@ export interface UserUpdateInput {
 export interface UserUpdateManyMutationInput {
   avatar?: Maybe<String>;
   username?: Maybe<String>;
+  password?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
   loginSecret?: Maybe<String>;
@@ -612,6 +652,7 @@ export interface PetCreateWithoutUserInput {
   species: String;
   device: String;
   class?: Maybe<String>;
+  sex: String;
 }
 
 export interface UserWhereInput {
@@ -657,6 +698,20 @@ export interface UserWhereInput {
   username_not_starts_with?: Maybe<String>;
   username_ends_with?: Maybe<String>;
   username_not_ends_with?: Maybe<String>;
+  password?: Maybe<String>;
+  password_not?: Maybe<String>;
+  password_in?: Maybe<String[] | String>;
+  password_not_in?: Maybe<String[] | String>;
+  password_lt?: Maybe<String>;
+  password_lte?: Maybe<String>;
+  password_gt?: Maybe<String>;
+  password_gte?: Maybe<String>;
+  password_contains?: Maybe<String>;
+  password_not_contains?: Maybe<String>;
+  password_starts_with?: Maybe<String>;
+  password_not_starts_with?: Maybe<String>;
+  password_ends_with?: Maybe<String>;
+  password_not_ends_with?: Maybe<String>;
   email?: Maybe<String>;
   email_not?: Maybe<String>;
   email_in?: Maybe<String[] | String>;
@@ -726,6 +781,7 @@ export interface UserWhereInput {
 export interface UserUpdateWithoutPetsDataInput {
   avatar?: Maybe<String>;
   username?: Maybe<String>;
+  password?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
   loginSecret?: Maybe<String>;
@@ -755,11 +811,13 @@ export interface PetUpdateWithoutUserDataInput {
   species?: Maybe<String>;
   device?: Maybe<String>;
   class?: Maybe<String>;
+  sex?: Maybe<String>;
 }
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   username?: Maybe<String>;
+  password?: Maybe<String>;
   email?: Maybe<String>;
 }>;
 
@@ -771,6 +829,7 @@ export interface UserPreviousValues {
   id: ID_Output;
   avatar?: String;
   username: String;
+  password: String;
   email: String;
   name: String;
   loginSecret?: String;
@@ -784,6 +843,7 @@ export interface UserPreviousValuesPromise
   id: () => Promise<ID_Output>;
   avatar: () => Promise<String>;
   username: () => Promise<String>;
+  password: () => Promise<String>;
   email: () => Promise<String>;
   name: () => Promise<String>;
   loginSecret: () => Promise<String>;
@@ -797,6 +857,7 @@ export interface UserPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   avatar: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   loginSecret: () => Promise<AsyncIterator<String>>;
@@ -815,6 +876,7 @@ export interface Pet {
   createAt: DateTimeOutput;
   updateAt: DateTimeOutput;
   class?: String;
+  sex: String;
 }
 
 export interface PetPromise extends Promise<Pet>, Fragmentable {
@@ -829,6 +891,7 @@ export interface PetPromise extends Promise<Pet>, Fragmentable {
   createAt: () => Promise<DateTimeOutput>;
   updateAt: () => Promise<DateTimeOutput>;
   class: () => Promise<String>;
+  sex: () => Promise<String>;
 }
 
 export interface PetSubscription
@@ -845,6 +908,7 @@ export interface PetSubscription
   createAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updateAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   class: () => Promise<AsyncIterator<String>>;
+  sex: () => Promise<AsyncIterator<String>>;
 }
 
 export interface PetNullablePromise extends Promise<Pet | null>, Fragmentable {
@@ -859,6 +923,7 @@ export interface PetNullablePromise extends Promise<Pet | null>, Fragmentable {
   createAt: () => Promise<DateTimeOutput>;
   updateAt: () => Promise<DateTimeOutput>;
   class: () => Promise<String>;
+  sex: () => Promise<String>;
 }
 
 export interface PetSubscriptionPayload {
@@ -999,6 +1064,7 @@ export interface PetPreviousValues {
   createAt: DateTimeOutput;
   updateAt: DateTimeOutput;
   class?: String;
+  sex: String;
 }
 
 export interface PetPreviousValuesPromise
@@ -1014,6 +1080,7 @@ export interface PetPreviousValuesPromise
   createAt: () => Promise<DateTimeOutput>;
   updateAt: () => Promise<DateTimeOutput>;
   class: () => Promise<String>;
+  sex: () => Promise<String>;
 }
 
 export interface PetPreviousValuesSubscription
@@ -1029,6 +1096,7 @@ export interface PetPreviousValuesSubscription
   createAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updateAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   class: () => Promise<AsyncIterator<String>>;
+  sex: () => Promise<AsyncIterator<String>>;
 }
 
 export interface BatchPayload {
@@ -1067,6 +1135,7 @@ export interface User {
   id: ID_Output;
   avatar?: String;
   username: String;
+  password: String;
   email: String;
   name: String;
   loginSecret?: String;
@@ -1078,6 +1147,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   avatar: () => Promise<String>;
   username: () => Promise<String>;
+  password: () => Promise<String>;
   email: () => Promise<String>;
   name: () => Promise<String>;
   loginSecret: () => Promise<String>;
@@ -1100,6 +1170,7 @@ export interface UserSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   avatar: () => Promise<AsyncIterator<String>>;
   username: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   loginSecret: () => Promise<AsyncIterator<String>>;
@@ -1122,6 +1193,7 @@ export interface UserNullablePromise
   id: () => Promise<ID_Output>;
   avatar: () => Promise<String>;
   username: () => Promise<String>;
+  password: () => Promise<String>;
   email: () => Promise<String>;
   name: () => Promise<String>;
   loginSecret: () => Promise<String>;

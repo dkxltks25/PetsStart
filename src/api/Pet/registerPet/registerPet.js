@@ -6,18 +6,20 @@ export default{
     Mutation:{
         registerPet: async(_,args,{request})=>{
             isAuthenticated(request);
-            const {name,age,species,height="",weight="",userId,device} = args;
+            const {name,age,species,height="",weight="",device,sex} = args;
             const {user} = request;
             try{
                 await prisma.createPet({
                     name,
-                    age,species,
+                    age,
+                    species,
                     height,
                     weight,
-                    device,
+                    device, 
+                    sex,
                     user:{
                         connect:{
-                            id:userId
+                            id:user.id
                         }
                     }
                 });

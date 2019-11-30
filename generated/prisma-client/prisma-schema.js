@@ -63,6 +63,7 @@ type Pet {
   createAt: DateTime!
   updateAt: DateTime!
   class: String
+  sex: String!
 }
 
 type PetConnection {
@@ -81,6 +82,7 @@ input PetCreateInput {
   species: String!
   device: String!
   class: String
+  sex: String!
 }
 
 input PetCreateManyWithoutUserInput {
@@ -97,6 +99,7 @@ input PetCreateWithoutUserInput {
   species: String!
   device: String!
   class: String
+  sex: String!
 }
 
 type PetEdge {
@@ -125,6 +128,8 @@ enum PetOrderByInput {
   updateAt_DESC
   class_ASC
   class_DESC
+  sex_ASC
+  sex_DESC
 }
 
 type PetPreviousValues {
@@ -138,6 +143,7 @@ type PetPreviousValues {
   createAt: DateTime!
   updateAt: DateTime!
   class: String
+  sex: String!
 }
 
 input PetScalarWhereInput {
@@ -269,6 +275,20 @@ input PetScalarWhereInput {
   class_not_starts_with: String
   class_ends_with: String
   class_not_ends_with: String
+  sex: String
+  sex_not: String
+  sex_in: [String!]
+  sex_not_in: [String!]
+  sex_lt: String
+  sex_lte: String
+  sex_gt: String
+  sex_gte: String
+  sex_contains: String
+  sex_not_contains: String
+  sex_starts_with: String
+  sex_not_starts_with: String
+  sex_ends_with: String
+  sex_not_ends_with: String
   AND: [PetScalarWhereInput!]
   OR: [PetScalarWhereInput!]
   NOT: [PetScalarWhereInput!]
@@ -301,6 +321,7 @@ input PetUpdateInput {
   species: String
   device: String
   class: String
+  sex: String
 }
 
 input PetUpdateManyDataInput {
@@ -311,6 +332,7 @@ input PetUpdateManyDataInput {
   species: String
   device: String
   class: String
+  sex: String
 }
 
 input PetUpdateManyMutationInput {
@@ -321,6 +343,7 @@ input PetUpdateManyMutationInput {
   species: String
   device: String
   class: String
+  sex: String
 }
 
 input PetUpdateManyWithoutUserInput {
@@ -348,6 +371,7 @@ input PetUpdateWithoutUserDataInput {
   species: String
   device: String
   class: String
+  sex: String
 }
 
 input PetUpdateWithWhereUniqueWithoutUserInput {
@@ -491,6 +515,20 @@ input PetWhereInput {
   class_not_starts_with: String
   class_ends_with: String
   class_not_ends_with: String
+  sex: String
+  sex_not: String
+  sex_in: [String!]
+  sex_not_in: [String!]
+  sex_lt: String
+  sex_lte: String
+  sex_gt: String
+  sex_gte: String
+  sex_contains: String
+  sex_not_contains: String
+  sex_starts_with: String
+  sex_not_starts_with: String
+  sex_ends_with: String
+  sex_not_ends_with: String
   AND: [PetWhereInput!]
   OR: [PetWhereInput!]
   NOT: [PetWhereInput!]
@@ -522,6 +560,7 @@ type User {
   id: ID!
   avatar: String
   username: String!
+  password: String!
   email: String!
   name: String!
   loginSecret: String
@@ -540,6 +579,7 @@ input UserCreateInput {
   id: ID
   avatar: String
   username: String!
+  password: String!
   email: String!
   name: String!
   loginSecret: String
@@ -555,6 +595,7 @@ input UserCreateWithoutPetsInput {
   id: ID
   avatar: String
   username: String!
+  password: String!
   email: String!
   name: String!
   loginSecret: String
@@ -572,6 +613,8 @@ enum UserOrderByInput {
   avatar_DESC
   username_ASC
   username_DESC
+  password_ASC
+  password_DESC
   email_ASC
   email_DESC
   name_ASC
@@ -588,6 +631,7 @@ type UserPreviousValues {
   id: ID!
   avatar: String
   username: String!
+  password: String!
   email: String!
   name: String!
   loginSecret: String
@@ -616,6 +660,7 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   avatar: String
   username: String
+  password: String
   email: String
   name: String
   loginSecret: String
@@ -625,6 +670,7 @@ input UserUpdateInput {
 input UserUpdateManyMutationInput {
   avatar: String
   username: String
+  password: String
   email: String
   name: String
   loginSecret: String
@@ -642,6 +688,7 @@ input UserUpdateOneWithoutPetsInput {
 input UserUpdateWithoutPetsDataInput {
   avatar: String
   username: String
+  password: String
   email: String
   name: String
   loginSecret: String
@@ -695,6 +742,20 @@ input UserWhereInput {
   username_not_starts_with: String
   username_ends_with: String
   username_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
   email: String
   email_not: String
   email_in: [String!]
@@ -764,6 +825,7 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   username: String
+  password: String
   email: String
 }
 `

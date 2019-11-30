@@ -2,6 +2,7 @@ type User {
   id: ID! 
   avatar:String
   username: String! 
+  password:String!
   email: String! 
   fullname: String! 
   loginSecret:String
@@ -22,4 +23,5 @@ type Pet{
   createdAt:String
   updatedAt:String
   class:String
+  sex:String!
 }
