@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateTemp {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -26,6 +30,12 @@ type Mutation {
   upsertPet(where: PetWhereUniqueInput!, create: PetCreateInput!, update: PetUpdateInput!): Pet!
   deletePet(where: PetWhereUniqueInput!): Pet
   deleteManyPets(where: PetWhereInput): BatchPayload!
+  createTemp(data: TempCreateInput!): Temp!
+  updateTemp(data: TempUpdateInput!, where: TempWhereUniqueInput!): Temp
+  updateManyTemps(data: TempUpdateManyMutationInput!, where: TempWhereInput): BatchPayload!
+  upsertTemp(where: TempWhereUniqueInput!, create: TempCreateInput!, update: TempUpdateInput!): Temp!
+  deleteTemp(where: TempWhereUniqueInput!): Temp
+  deleteManyTemps(where: TempWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -59,7 +69,8 @@ type Pet {
   weight: String
   height: String
   species: String!
-  device: String!
+  device(where: TempWhereInput, orderBy: TempOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Temp!]
+  deviceName: String!
   createAt: DateTime!
   updateAt: DateTime!
   class: String
@@ -80,7 +91,8 @@ input PetCreateInput {
   weight: String
   height: String
   species: String!
-  device: String!
+  device: TempCreateManyWithoutPetInput
+  deviceName: String!
   class: String
   sex: String!
 }
@@ -90,6 +102,24 @@ input PetCreateManyWithoutUserInput {
   connect: [PetWhereUniqueInput!]
 }
 
+input PetCreateOneWithoutDeviceInput {
+  create: PetCreateWithoutDeviceInput
+  connect: PetWhereUniqueInput
+}
+
+input PetCreateWithoutDeviceInput {
+  id: ID
+  user: UserCreateOneWithoutPetsInput
+  name: String!
+  age: String!
+  weight: String
+  height: String
+  species: String!
+  deviceName: String!
+  class: String
+  sex: String!
+}
+
 input PetCreateWithoutUserInput {
   id: ID
   name: String!
@@ -97,7 +127,8 @@ input PetCreateWithoutUserInput {
   weight: String
   height: String
   species: String!
-  device: String!
+  device: TempCreateManyWithoutPetInput
+  deviceName: String!
   class: String
   sex: String!
 }
@@ -120,8 +151,8 @@ enum PetOrderByInput {
   height_DESC
   species_ASC
   species_DESC
-  device_ASC
-  device_DESC
+  deviceName_ASC
+  deviceName_DESC
   createAt_ASC
   createAt_DESC
   updateAt_ASC
@@ -139,7 +170,7 @@ type PetPreviousValues {
   weight: String
   height: String
   species: String!
-  device: String!
+  deviceName: String!
   createAt: DateTime!
   updateAt: DateTime!
   class: String
@@ -231,20 +262,20 @@ input PetScalarWhereInput {
   species_not_starts_with: String
   species_ends_with: String
   species_not_ends_with: String
-  device: String
-  device_not: String
-  device_in: [String!]
-  device_not_in: [String!]
-  device_lt: String
-  device_lte: String
-  device_gt: String
-  device_gte: String
-  device_contains: String
-  device_not_contains: String
-  device_starts_with: String
-  device_not_starts_with: String
-  device_ends_with: String
-  device_not_ends_with: String
+  deviceName: String
+  deviceName_not: String
+  deviceName_in: [String!]
+  deviceName_not_in: [String!]
+  deviceName_lt: String
+  deviceName_lte: String
+  deviceName_gt: String
+  deviceName_gte: String
+  deviceName_contains: String
+  deviceName_not_contains: String
+  deviceName_starts_with: String
+  deviceName_not_starts_with: String
+  deviceName_ends_with: String
+  deviceName_not_ends_with: String
   createAt: DateTime
   createAt_not: DateTime
   createAt_in: [DateTime!]
@@ -319,7 +350,8 @@ input PetUpdateInput {
   weight: String
   height: String
   species: String
-  device: String
+  device: TempUpdateManyWithoutPetInput
+  deviceName: String
   class: String
   sex: String
 }
@@ -330,7 +362,7 @@ input PetUpdateManyDataInput {
   weight: String
   height: String
   species: String
-  device: String
+  deviceName: String
   class: String
   sex: String
 }
@@ -341,7 +373,7 @@ input PetUpdateManyMutationInput {
   weight: String
   height: String
   species: String
-  device: String
+  deviceName: String
   class: String
   sex: String
 }
@@ -363,13 +395,33 @@ input PetUpdateManyWithWhereNestedInput {
   data: PetUpdateManyDataInput!
 }
 
+input PetUpdateOneRequiredWithoutDeviceInput {
+  create: PetCreateWithoutDeviceInput
+  update: PetUpdateWithoutDeviceDataInput
+  upsert: PetUpsertWithoutDeviceInput
+  connect: PetWhereUniqueInput
+}
+
+input PetUpdateWithoutDeviceDataInput {
+  user: UserUpdateOneWithoutPetsInput
+  name: String
+  age: String
+  weight: String
+  height: String
+  species: String
+  deviceName: String
+  class: String
+  sex: String
+}
+
 input PetUpdateWithoutUserDataInput {
   name: String
   age: String
   weight: String
   height: String
   species: String
-  device: String
+  device: TempUpdateManyWithoutPetInput
+  deviceName: String
   class: String
   sex: String
 }
@@ -377,6 +429,11 @@ input PetUpdateWithoutUserDataInput {
 input PetUpdateWithWhereUniqueWithoutUserInput {
   where: PetWhereUniqueInput!
   data: PetUpdateWithoutUserDataInput!
+}
+
+input PetUpsertWithoutDeviceInput {
+  update: PetUpdateWithoutDeviceDataInput!
+  create: PetCreateWithoutDeviceInput!
 }
 
 input PetUpsertWithWhereUniqueWithoutUserInput {
@@ -471,20 +528,23 @@ input PetWhereInput {
   species_not_starts_with: String
   species_ends_with: String
   species_not_ends_with: String
-  device: String
-  device_not: String
-  device_in: [String!]
-  device_not_in: [String!]
-  device_lt: String
-  device_lte: String
-  device_gt: String
-  device_gte: String
-  device_contains: String
-  device_not_contains: String
-  device_starts_with: String
-  device_not_starts_with: String
-  device_ends_with: String
-  device_not_ends_with: String
+  device_every: TempWhereInput
+  device_some: TempWhereInput
+  device_none: TempWhereInput
+  deviceName: String
+  deviceName_not: String
+  deviceName_in: [String!]
+  deviceName_not_in: [String!]
+  deviceName_lt: String
+  deviceName_lte: String
+  deviceName_gt: String
+  deviceName_gte: String
+  deviceName_contains: String
+  deviceName_not_contains: String
+  deviceName_starts_with: String
+  deviceName_not_starts_with: String
+  deviceName_ends_with: String
+  deviceName_not_ends_with: String
   createAt: DateTime
   createAt_not: DateTime
   createAt_in: [DateTime!]
@@ -539,12 +599,16 @@ input PetWhereUniqueInput {
   name: String
   age: String
   species: String
+  deviceName: String
 }
 
 type Query {
   pet(where: PetWhereUniqueInput!): Pet
   pets(where: PetWhereInput, orderBy: PetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Pet]!
   petsConnection(where: PetWhereInput, orderBy: PetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PetConnection!
+  temp(where: TempWhereUniqueInput!): Temp
+  temps(where: TempWhereInput, orderBy: TempOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Temp]!
+  tempsConnection(where: TempWhereInput, orderBy: TempOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TempConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -553,7 +617,255 @@ type Query {
 
 type Subscription {
   pet(where: PetSubscriptionWhereInput): PetSubscriptionPayload
+  temp(where: TempSubscriptionWhereInput): TempSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Temp {
+  id: ID!
+  deviceName: String!
+  pet: Pet!
+  Temp: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TempConnection {
+  pageInfo: PageInfo!
+  edges: [TempEdge]!
+  aggregate: AggregateTemp!
+}
+
+input TempCreateInput {
+  id: ID
+  deviceName: String!
+  pet: PetCreateOneWithoutDeviceInput!
+  Temp: Float!
+}
+
+input TempCreateManyWithoutPetInput {
+  create: [TempCreateWithoutPetInput!]
+  connect: [TempWhereUniqueInput!]
+}
+
+input TempCreateWithoutPetInput {
+  id: ID
+  deviceName: String!
+  Temp: Float!
+}
+
+type TempEdge {
+  node: Temp!
+  cursor: String!
+}
+
+enum TempOrderByInput {
+  id_ASC
+  id_DESC
+  deviceName_ASC
+  deviceName_DESC
+  Temp_ASC
+  Temp_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TempPreviousValues {
+  id: ID!
+  deviceName: String!
+  Temp: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input TempScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  deviceName: String
+  deviceName_not: String
+  deviceName_in: [String!]
+  deviceName_not_in: [String!]
+  deviceName_lt: String
+  deviceName_lte: String
+  deviceName_gt: String
+  deviceName_gte: String
+  deviceName_contains: String
+  deviceName_not_contains: String
+  deviceName_starts_with: String
+  deviceName_not_starts_with: String
+  deviceName_ends_with: String
+  deviceName_not_ends_with: String
+  Temp: Float
+  Temp_not: Float
+  Temp_in: [Float!]
+  Temp_not_in: [Float!]
+  Temp_lt: Float
+  Temp_lte: Float
+  Temp_gt: Float
+  Temp_gte: Float
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [TempScalarWhereInput!]
+  OR: [TempScalarWhereInput!]
+  NOT: [TempScalarWhereInput!]
+}
+
+type TempSubscriptionPayload {
+  mutation: MutationType!
+  node: Temp
+  updatedFields: [String!]
+  previousValues: TempPreviousValues
+}
+
+input TempSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TempWhereInput
+  AND: [TempSubscriptionWhereInput!]
+  OR: [TempSubscriptionWhereInput!]
+  NOT: [TempSubscriptionWhereInput!]
+}
+
+input TempUpdateInput {
+  deviceName: String
+  pet: PetUpdateOneRequiredWithoutDeviceInput
+  Temp: Float
+}
+
+input TempUpdateManyDataInput {
+  deviceName: String
+  Temp: Float
+}
+
+input TempUpdateManyMutationInput {
+  deviceName: String
+  Temp: Float
+}
+
+input TempUpdateManyWithoutPetInput {
+  create: [TempCreateWithoutPetInput!]
+  delete: [TempWhereUniqueInput!]
+  connect: [TempWhereUniqueInput!]
+  set: [TempWhereUniqueInput!]
+  disconnect: [TempWhereUniqueInput!]
+  update: [TempUpdateWithWhereUniqueWithoutPetInput!]
+  upsert: [TempUpsertWithWhereUniqueWithoutPetInput!]
+  deleteMany: [TempScalarWhereInput!]
+  updateMany: [TempUpdateManyWithWhereNestedInput!]
+}
+
+input TempUpdateManyWithWhereNestedInput {
+  where: TempScalarWhereInput!
+  data: TempUpdateManyDataInput!
+}
+
+input TempUpdateWithoutPetDataInput {
+  deviceName: String
+  Temp: Float
+}
+
+input TempUpdateWithWhereUniqueWithoutPetInput {
+  where: TempWhereUniqueInput!
+  data: TempUpdateWithoutPetDataInput!
+}
+
+input TempUpsertWithWhereUniqueWithoutPetInput {
+  where: TempWhereUniqueInput!
+  update: TempUpdateWithoutPetDataInput!
+  create: TempCreateWithoutPetInput!
+}
+
+input TempWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  deviceName: String
+  deviceName_not: String
+  deviceName_in: [String!]
+  deviceName_not_in: [String!]
+  deviceName_lt: String
+  deviceName_lte: String
+  deviceName_gt: String
+  deviceName_gte: String
+  deviceName_contains: String
+  deviceName_not_contains: String
+  deviceName_starts_with: String
+  deviceName_not_starts_with: String
+  deviceName_ends_with: String
+  deviceName_not_ends_with: String
+  pet: PetWhereInput
+  Temp: Float
+  Temp_not: Float
+  Temp_in: [Float!]
+  Temp_not_in: [Float!]
+  Temp_lt: Float
+  Temp_lte: Float
+  Temp_gt: Float
+  Temp_gte: Float
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [TempWhereInput!]
+  OR: [TempWhereInput!]
+  NOT: [TempWhereInput!]
+}
+
+input TempWhereUniqueInput {
+  id: ID
 }
 
 type User {

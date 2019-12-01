@@ -17,6 +17,7 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   pet: (where?: PetWhereInput) => Promise<boolean>;
+  temp: (where?: TempWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -58,6 +59,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => PetConnectionPromise;
+  temp: (where: TempWhereUniqueInput) => TempNullablePromise;
+  temps: (args?: {
+    where?: TempWhereInput;
+    orderBy?: TempOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Temp>;
+  tempsConnection: (args?: {
+    where?: TempWhereInput;
+    orderBy?: TempOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => TempConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -99,6 +119,22 @@ export interface Prisma {
   }) => PetPromise;
   deletePet: (where: PetWhereUniqueInput) => PetPromise;
   deleteManyPets: (where?: PetWhereInput) => BatchPayloadPromise;
+  createTemp: (data: TempCreateInput) => TempPromise;
+  updateTemp: (args: {
+    data: TempUpdateInput;
+    where: TempWhereUniqueInput;
+  }) => TempPromise;
+  updateManyTemps: (args: {
+    data: TempUpdateManyMutationInput;
+    where?: TempWhereInput;
+  }) => BatchPayloadPromise;
+  upsertTemp: (args: {
+    where: TempWhereUniqueInput;
+    create: TempCreateInput;
+    update: TempUpdateInput;
+  }) => TempPromise;
+  deleteTemp: (where: TempWhereUniqueInput) => TempPromise;
+  deleteManyTemps: (where?: TempWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -127,6 +163,9 @@ export interface Subscription {
   pet: (
     where?: PetSubscriptionWhereInput
   ) => PetSubscriptionPayloadSubscription;
+  temp: (
+    where?: TempSubscriptionWhereInput
+  ) => TempSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -153,8 +192,8 @@ export type PetOrderByInput =
   | "height_DESC"
   | "species_ASC"
   | "species_DESC"
-  | "device_ASC"
-  | "device_DESC"
+  | "deviceName_ASC"
+  | "deviceName_DESC"
   | "createAt_ASC"
   | "createAt_DESC"
   | "updateAt_ASC"
@@ -163,6 +202,18 @@ export type PetOrderByInput =
   | "class_DESC"
   | "sex_ASC"
   | "sex_DESC";
+
+export type TempOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "deviceName_ASC"
+  | "deviceName_DESC"
+  | "Temp_ASC"
+  | "Temp_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -186,13 +237,9 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserUpdateOneWithoutPetsInput {
-  create?: Maybe<UserCreateWithoutPetsInput>;
-  update?: Maybe<UserUpdateWithoutPetsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutPetsInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface TempUpdateWithWhereUniqueWithoutPetInput {
+  where: TempWhereUniqueInput;
+  data: TempUpdateWithoutPetDataInput;
 }
 
 export type PetWhereUniqueInput = AtLeastOne<{
@@ -200,14 +247,10 @@ export type PetWhereUniqueInput = AtLeastOne<{
   name?: Maybe<String>;
   age?: Maybe<String>;
   species?: Maybe<String>;
+  deviceName?: Maybe<String>;
 }>;
 
-export interface UserUpsertWithoutPetsInput {
-  update: UserUpdateWithoutPetsDataInput;
-  create: UserCreateWithoutPetsInput;
-}
-
-export interface PetWhereInput {
+export interface TempScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -222,437 +265,47 @@ export interface PetWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  user?: Maybe<UserWhereInput>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  age?: Maybe<String>;
-  age_not?: Maybe<String>;
-  age_in?: Maybe<String[] | String>;
-  age_not_in?: Maybe<String[] | String>;
-  age_lt?: Maybe<String>;
-  age_lte?: Maybe<String>;
-  age_gt?: Maybe<String>;
-  age_gte?: Maybe<String>;
-  age_contains?: Maybe<String>;
-  age_not_contains?: Maybe<String>;
-  age_starts_with?: Maybe<String>;
-  age_not_starts_with?: Maybe<String>;
-  age_ends_with?: Maybe<String>;
-  age_not_ends_with?: Maybe<String>;
-  weight?: Maybe<String>;
-  weight_not?: Maybe<String>;
-  weight_in?: Maybe<String[] | String>;
-  weight_not_in?: Maybe<String[] | String>;
-  weight_lt?: Maybe<String>;
-  weight_lte?: Maybe<String>;
-  weight_gt?: Maybe<String>;
-  weight_gte?: Maybe<String>;
-  weight_contains?: Maybe<String>;
-  weight_not_contains?: Maybe<String>;
-  weight_starts_with?: Maybe<String>;
-  weight_not_starts_with?: Maybe<String>;
-  weight_ends_with?: Maybe<String>;
-  weight_not_ends_with?: Maybe<String>;
-  height?: Maybe<String>;
-  height_not?: Maybe<String>;
-  height_in?: Maybe<String[] | String>;
-  height_not_in?: Maybe<String[] | String>;
-  height_lt?: Maybe<String>;
-  height_lte?: Maybe<String>;
-  height_gt?: Maybe<String>;
-  height_gte?: Maybe<String>;
-  height_contains?: Maybe<String>;
-  height_not_contains?: Maybe<String>;
-  height_starts_with?: Maybe<String>;
-  height_not_starts_with?: Maybe<String>;
-  height_ends_with?: Maybe<String>;
-  height_not_ends_with?: Maybe<String>;
-  species?: Maybe<String>;
-  species_not?: Maybe<String>;
-  species_in?: Maybe<String[] | String>;
-  species_not_in?: Maybe<String[] | String>;
-  species_lt?: Maybe<String>;
-  species_lte?: Maybe<String>;
-  species_gt?: Maybe<String>;
-  species_gte?: Maybe<String>;
-  species_contains?: Maybe<String>;
-  species_not_contains?: Maybe<String>;
-  species_starts_with?: Maybe<String>;
-  species_not_starts_with?: Maybe<String>;
-  species_ends_with?: Maybe<String>;
-  species_not_ends_with?: Maybe<String>;
-  device?: Maybe<String>;
-  device_not?: Maybe<String>;
-  device_in?: Maybe<String[] | String>;
-  device_not_in?: Maybe<String[] | String>;
-  device_lt?: Maybe<String>;
-  device_lte?: Maybe<String>;
-  device_gt?: Maybe<String>;
-  device_gte?: Maybe<String>;
-  device_contains?: Maybe<String>;
-  device_not_contains?: Maybe<String>;
-  device_starts_with?: Maybe<String>;
-  device_not_starts_with?: Maybe<String>;
-  device_ends_with?: Maybe<String>;
-  device_not_ends_with?: Maybe<String>;
-  createAt?: Maybe<DateTimeInput>;
-  createAt_not?: Maybe<DateTimeInput>;
-  createAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createAt_lt?: Maybe<DateTimeInput>;
-  createAt_lte?: Maybe<DateTimeInput>;
-  createAt_gt?: Maybe<DateTimeInput>;
-  createAt_gte?: Maybe<DateTimeInput>;
-  updateAt?: Maybe<DateTimeInput>;
-  updateAt_not?: Maybe<DateTimeInput>;
-  updateAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updateAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updateAt_lt?: Maybe<DateTimeInput>;
-  updateAt_lte?: Maybe<DateTimeInput>;
-  updateAt_gt?: Maybe<DateTimeInput>;
-  updateAt_gte?: Maybe<DateTimeInput>;
-  class?: Maybe<String>;
-  class_not?: Maybe<String>;
-  class_in?: Maybe<String[] | String>;
-  class_not_in?: Maybe<String[] | String>;
-  class_lt?: Maybe<String>;
-  class_lte?: Maybe<String>;
-  class_gt?: Maybe<String>;
-  class_gte?: Maybe<String>;
-  class_contains?: Maybe<String>;
-  class_not_contains?: Maybe<String>;
-  class_starts_with?: Maybe<String>;
-  class_not_starts_with?: Maybe<String>;
-  class_ends_with?: Maybe<String>;
-  class_not_ends_with?: Maybe<String>;
-  sex?: Maybe<String>;
-  sex_not?: Maybe<String>;
-  sex_in?: Maybe<String[] | String>;
-  sex_not_in?: Maybe<String[] | String>;
-  sex_lt?: Maybe<String>;
-  sex_lte?: Maybe<String>;
-  sex_gt?: Maybe<String>;
-  sex_gte?: Maybe<String>;
-  sex_contains?: Maybe<String>;
-  sex_not_contains?: Maybe<String>;
-  sex_starts_with?: Maybe<String>;
-  sex_not_starts_with?: Maybe<String>;
-  sex_ends_with?: Maybe<String>;
-  sex_not_ends_with?: Maybe<String>;
-  AND?: Maybe<PetWhereInput[] | PetWhereInput>;
-  OR?: Maybe<PetWhereInput[] | PetWhereInput>;
-  NOT?: Maybe<PetWhereInput[] | PetWhereInput>;
-}
-
-export interface PetUpdateManyWithoutUserInput {
-  create?: Maybe<PetCreateWithoutUserInput[] | PetCreateWithoutUserInput>;
-  delete?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
-  connect?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
-  set?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
-  disconnect?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
-  update?: Maybe<
-    | PetUpdateWithWhereUniqueWithoutUserInput[]
-    | PetUpdateWithWhereUniqueWithoutUserInput
-  >;
-  upsert?: Maybe<
-    | PetUpsertWithWhereUniqueWithoutUserInput[]
-    | PetUpsertWithWhereUniqueWithoutUserInput
-  >;
-  deleteMany?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
-  updateMany?: Maybe<
-    PetUpdateManyWithWhereNestedInput[] | PetUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  avatar?: Maybe<String>;
-  username: String;
-  password: String;
-  email: String;
-  name: String;
-  loginSecret?: Maybe<String>;
-  pets?: Maybe<PetCreateManyWithoutUserInput>;
-}
-
-export interface PetUpdateManyMutationInput {
-  name?: Maybe<String>;
-  age?: Maybe<String>;
-  weight?: Maybe<String>;
-  height?: Maybe<String>;
-  species?: Maybe<String>;
-  device?: Maybe<String>;
-  class?: Maybe<String>;
-  sex?: Maybe<String>;
-}
-
-export interface PetSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<PetWhereInput>;
-  AND?: Maybe<PetSubscriptionWhereInput[] | PetSubscriptionWhereInput>;
-  OR?: Maybe<PetSubscriptionWhereInput[] | PetSubscriptionWhereInput>;
-  NOT?: Maybe<PetSubscriptionWhereInput[] | PetSubscriptionWhereInput>;
-}
-
-export interface PetCreateInput {
-  id?: Maybe<ID_Input>;
-  user?: Maybe<UserCreateOneWithoutPetsInput>;
-  name: String;
-  age: String;
-  weight?: Maybe<String>;
-  height?: Maybe<String>;
-  species: String;
-  device: String;
-  class?: Maybe<String>;
-  sex: String;
-}
-
-export interface PetUpdateManyDataInput {
-  name?: Maybe<String>;
-  age?: Maybe<String>;
-  weight?: Maybe<String>;
-  height?: Maybe<String>;
-  species?: Maybe<String>;
-  device?: Maybe<String>;
-  class?: Maybe<String>;
-  sex?: Maybe<String>;
-}
-
-export interface UserCreateOneWithoutPetsInput {
-  create?: Maybe<UserCreateWithoutPetsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface PetScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  age?: Maybe<String>;
-  age_not?: Maybe<String>;
-  age_in?: Maybe<String[] | String>;
-  age_not_in?: Maybe<String[] | String>;
-  age_lt?: Maybe<String>;
-  age_lte?: Maybe<String>;
-  age_gt?: Maybe<String>;
-  age_gte?: Maybe<String>;
-  age_contains?: Maybe<String>;
-  age_not_contains?: Maybe<String>;
-  age_starts_with?: Maybe<String>;
-  age_not_starts_with?: Maybe<String>;
-  age_ends_with?: Maybe<String>;
-  age_not_ends_with?: Maybe<String>;
-  weight?: Maybe<String>;
-  weight_not?: Maybe<String>;
-  weight_in?: Maybe<String[] | String>;
-  weight_not_in?: Maybe<String[] | String>;
-  weight_lt?: Maybe<String>;
-  weight_lte?: Maybe<String>;
-  weight_gt?: Maybe<String>;
-  weight_gte?: Maybe<String>;
-  weight_contains?: Maybe<String>;
-  weight_not_contains?: Maybe<String>;
-  weight_starts_with?: Maybe<String>;
-  weight_not_starts_with?: Maybe<String>;
-  weight_ends_with?: Maybe<String>;
-  weight_not_ends_with?: Maybe<String>;
-  height?: Maybe<String>;
-  height_not?: Maybe<String>;
-  height_in?: Maybe<String[] | String>;
-  height_not_in?: Maybe<String[] | String>;
-  height_lt?: Maybe<String>;
-  height_lte?: Maybe<String>;
-  height_gt?: Maybe<String>;
-  height_gte?: Maybe<String>;
-  height_contains?: Maybe<String>;
-  height_not_contains?: Maybe<String>;
-  height_starts_with?: Maybe<String>;
-  height_not_starts_with?: Maybe<String>;
-  height_ends_with?: Maybe<String>;
-  height_not_ends_with?: Maybe<String>;
-  species?: Maybe<String>;
-  species_not?: Maybe<String>;
-  species_in?: Maybe<String[] | String>;
-  species_not_in?: Maybe<String[] | String>;
-  species_lt?: Maybe<String>;
-  species_lte?: Maybe<String>;
-  species_gt?: Maybe<String>;
-  species_gte?: Maybe<String>;
-  species_contains?: Maybe<String>;
-  species_not_contains?: Maybe<String>;
-  species_starts_with?: Maybe<String>;
-  species_not_starts_with?: Maybe<String>;
-  species_ends_with?: Maybe<String>;
-  species_not_ends_with?: Maybe<String>;
-  device?: Maybe<String>;
-  device_not?: Maybe<String>;
-  device_in?: Maybe<String[] | String>;
-  device_not_in?: Maybe<String[] | String>;
-  device_lt?: Maybe<String>;
-  device_lte?: Maybe<String>;
-  device_gt?: Maybe<String>;
-  device_gte?: Maybe<String>;
-  device_contains?: Maybe<String>;
-  device_not_contains?: Maybe<String>;
-  device_starts_with?: Maybe<String>;
-  device_not_starts_with?: Maybe<String>;
-  device_ends_with?: Maybe<String>;
-  device_not_ends_with?: Maybe<String>;
-  createAt?: Maybe<DateTimeInput>;
-  createAt_not?: Maybe<DateTimeInput>;
-  createAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createAt_lt?: Maybe<DateTimeInput>;
-  createAt_lte?: Maybe<DateTimeInput>;
-  createAt_gt?: Maybe<DateTimeInput>;
-  createAt_gte?: Maybe<DateTimeInput>;
-  updateAt?: Maybe<DateTimeInput>;
-  updateAt_not?: Maybe<DateTimeInput>;
-  updateAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updateAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updateAt_lt?: Maybe<DateTimeInput>;
-  updateAt_lte?: Maybe<DateTimeInput>;
-  updateAt_gt?: Maybe<DateTimeInput>;
-  updateAt_gte?: Maybe<DateTimeInput>;
-  class?: Maybe<String>;
-  class_not?: Maybe<String>;
-  class_in?: Maybe<String[] | String>;
-  class_not_in?: Maybe<String[] | String>;
-  class_lt?: Maybe<String>;
-  class_lte?: Maybe<String>;
-  class_gt?: Maybe<String>;
-  class_gte?: Maybe<String>;
-  class_contains?: Maybe<String>;
-  class_not_contains?: Maybe<String>;
-  class_starts_with?: Maybe<String>;
-  class_not_starts_with?: Maybe<String>;
-  class_ends_with?: Maybe<String>;
-  class_not_ends_with?: Maybe<String>;
-  sex?: Maybe<String>;
-  sex_not?: Maybe<String>;
-  sex_in?: Maybe<String[] | String>;
-  sex_not_in?: Maybe<String[] | String>;
-  sex_lt?: Maybe<String>;
-  sex_lte?: Maybe<String>;
-  sex_gt?: Maybe<String>;
-  sex_gte?: Maybe<String>;
-  sex_contains?: Maybe<String>;
-  sex_not_contains?: Maybe<String>;
-  sex_starts_with?: Maybe<String>;
-  sex_not_starts_with?: Maybe<String>;
-  sex_ends_with?: Maybe<String>;
-  sex_not_ends_with?: Maybe<String>;
-  AND?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
-  OR?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
-  NOT?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
-}
-
-export interface UserCreateWithoutPetsInput {
-  id?: Maybe<ID_Input>;
-  avatar?: Maybe<String>;
-  username: String;
-  password: String;
-  email: String;
-  name: String;
-  loginSecret?: Maybe<String>;
-}
-
-export interface PetUpsertWithWhereUniqueWithoutUserInput {
-  where: PetWhereUniqueInput;
-  update: PetUpdateWithoutUserDataInput;
-  create: PetCreateWithoutUserInput;
-}
-
-export interface PetUpdateInput {
-  user?: Maybe<UserUpdateOneWithoutPetsInput>;
-  name?: Maybe<String>;
-  age?: Maybe<String>;
-  weight?: Maybe<String>;
-  height?: Maybe<String>;
-  species?: Maybe<String>;
-  device?: Maybe<String>;
-  class?: Maybe<String>;
-  sex?: Maybe<String>;
-}
-
-export interface PetUpdateWithWhereUniqueWithoutUserInput {
-  where: PetWhereUniqueInput;
-  data: PetUpdateWithoutUserDataInput;
-}
-
-export interface UserUpdateInput {
-  avatar?: Maybe<String>;
-  username?: Maybe<String>;
-  password?: Maybe<String>;
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  loginSecret?: Maybe<String>;
-  pets?: Maybe<PetUpdateManyWithoutUserInput>;
-}
-
-export interface UserUpdateManyMutationInput {
-  avatar?: Maybe<String>;
-  username?: Maybe<String>;
-  password?: Maybe<String>;
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  loginSecret?: Maybe<String>;
-}
-
-export interface PetCreateManyWithoutUserInput {
-  create?: Maybe<PetCreateWithoutUserInput[] | PetCreateWithoutUserInput>;
-  connect?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
-}
-
-export interface PetCreateWithoutUserInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  age: String;
-  weight?: Maybe<String>;
-  height?: Maybe<String>;
-  species: String;
-  device: String;
-  class?: Maybe<String>;
-  sex: String;
+  deviceName?: Maybe<String>;
+  deviceName_not?: Maybe<String>;
+  deviceName_in?: Maybe<String[] | String>;
+  deviceName_not_in?: Maybe<String[] | String>;
+  deviceName_lt?: Maybe<String>;
+  deviceName_lte?: Maybe<String>;
+  deviceName_gt?: Maybe<String>;
+  deviceName_gte?: Maybe<String>;
+  deviceName_contains?: Maybe<String>;
+  deviceName_not_contains?: Maybe<String>;
+  deviceName_starts_with?: Maybe<String>;
+  deviceName_not_starts_with?: Maybe<String>;
+  deviceName_ends_with?: Maybe<String>;
+  deviceName_not_ends_with?: Maybe<String>;
+  Temp?: Maybe<Float>;
+  Temp_not?: Maybe<Float>;
+  Temp_in?: Maybe<Float[] | Float>;
+  Temp_not_in?: Maybe<Float[] | Float>;
+  Temp_lt?: Maybe<Float>;
+  Temp_lte?: Maybe<Float>;
+  Temp_gt?: Maybe<Float>;
+  Temp_gte?: Maybe<Float>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<TempScalarWhereInput[] | TempScalarWhereInput>;
+  OR?: Maybe<TempScalarWhereInput[] | TempScalarWhereInput>;
+  NOT?: Maybe<TempScalarWhereInput[] | TempScalarWhereInput>;
 }
 
 export interface UserWhereInput {
@@ -778,6 +431,297 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export interface TempUpdateManyWithWhereNestedInput {
+  where: TempScalarWhereInput;
+  data: TempUpdateManyDataInput;
+}
+
+export interface TempWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  deviceName?: Maybe<String>;
+  deviceName_not?: Maybe<String>;
+  deviceName_in?: Maybe<String[] | String>;
+  deviceName_not_in?: Maybe<String[] | String>;
+  deviceName_lt?: Maybe<String>;
+  deviceName_lte?: Maybe<String>;
+  deviceName_gt?: Maybe<String>;
+  deviceName_gte?: Maybe<String>;
+  deviceName_contains?: Maybe<String>;
+  deviceName_not_contains?: Maybe<String>;
+  deviceName_starts_with?: Maybe<String>;
+  deviceName_not_starts_with?: Maybe<String>;
+  deviceName_ends_with?: Maybe<String>;
+  deviceName_not_ends_with?: Maybe<String>;
+  pet?: Maybe<PetWhereInput>;
+  Temp?: Maybe<Float>;
+  Temp_not?: Maybe<Float>;
+  Temp_in?: Maybe<Float[] | Float>;
+  Temp_not_in?: Maybe<Float[] | Float>;
+  Temp_lt?: Maybe<Float>;
+  Temp_lte?: Maybe<Float>;
+  Temp_gt?: Maybe<Float>;
+  Temp_gte?: Maybe<Float>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<TempWhereInput[] | TempWhereInput>;
+  OR?: Maybe<TempWhereInput[] | TempWhereInput>;
+  NOT?: Maybe<TempWhereInput[] | TempWhereInput>;
+}
+
+export interface TempUpdateManyDataInput {
+  deviceName?: Maybe<String>;
+  Temp?: Maybe<Float>;
+}
+
+export interface PetWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  user?: Maybe<UserWhereInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  age?: Maybe<String>;
+  age_not?: Maybe<String>;
+  age_in?: Maybe<String[] | String>;
+  age_not_in?: Maybe<String[] | String>;
+  age_lt?: Maybe<String>;
+  age_lte?: Maybe<String>;
+  age_gt?: Maybe<String>;
+  age_gte?: Maybe<String>;
+  age_contains?: Maybe<String>;
+  age_not_contains?: Maybe<String>;
+  age_starts_with?: Maybe<String>;
+  age_not_starts_with?: Maybe<String>;
+  age_ends_with?: Maybe<String>;
+  age_not_ends_with?: Maybe<String>;
+  weight?: Maybe<String>;
+  weight_not?: Maybe<String>;
+  weight_in?: Maybe<String[] | String>;
+  weight_not_in?: Maybe<String[] | String>;
+  weight_lt?: Maybe<String>;
+  weight_lte?: Maybe<String>;
+  weight_gt?: Maybe<String>;
+  weight_gte?: Maybe<String>;
+  weight_contains?: Maybe<String>;
+  weight_not_contains?: Maybe<String>;
+  weight_starts_with?: Maybe<String>;
+  weight_not_starts_with?: Maybe<String>;
+  weight_ends_with?: Maybe<String>;
+  weight_not_ends_with?: Maybe<String>;
+  height?: Maybe<String>;
+  height_not?: Maybe<String>;
+  height_in?: Maybe<String[] | String>;
+  height_not_in?: Maybe<String[] | String>;
+  height_lt?: Maybe<String>;
+  height_lte?: Maybe<String>;
+  height_gt?: Maybe<String>;
+  height_gte?: Maybe<String>;
+  height_contains?: Maybe<String>;
+  height_not_contains?: Maybe<String>;
+  height_starts_with?: Maybe<String>;
+  height_not_starts_with?: Maybe<String>;
+  height_ends_with?: Maybe<String>;
+  height_not_ends_with?: Maybe<String>;
+  species?: Maybe<String>;
+  species_not?: Maybe<String>;
+  species_in?: Maybe<String[] | String>;
+  species_not_in?: Maybe<String[] | String>;
+  species_lt?: Maybe<String>;
+  species_lte?: Maybe<String>;
+  species_gt?: Maybe<String>;
+  species_gte?: Maybe<String>;
+  species_contains?: Maybe<String>;
+  species_not_contains?: Maybe<String>;
+  species_starts_with?: Maybe<String>;
+  species_not_starts_with?: Maybe<String>;
+  species_ends_with?: Maybe<String>;
+  species_not_ends_with?: Maybe<String>;
+  device_every?: Maybe<TempWhereInput>;
+  device_some?: Maybe<TempWhereInput>;
+  device_none?: Maybe<TempWhereInput>;
+  deviceName?: Maybe<String>;
+  deviceName_not?: Maybe<String>;
+  deviceName_in?: Maybe<String[] | String>;
+  deviceName_not_in?: Maybe<String[] | String>;
+  deviceName_lt?: Maybe<String>;
+  deviceName_lte?: Maybe<String>;
+  deviceName_gt?: Maybe<String>;
+  deviceName_gte?: Maybe<String>;
+  deviceName_contains?: Maybe<String>;
+  deviceName_not_contains?: Maybe<String>;
+  deviceName_starts_with?: Maybe<String>;
+  deviceName_not_starts_with?: Maybe<String>;
+  deviceName_ends_with?: Maybe<String>;
+  deviceName_not_ends_with?: Maybe<String>;
+  createAt?: Maybe<DateTimeInput>;
+  createAt_not?: Maybe<DateTimeInput>;
+  createAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createAt_lt?: Maybe<DateTimeInput>;
+  createAt_lte?: Maybe<DateTimeInput>;
+  createAt_gt?: Maybe<DateTimeInput>;
+  createAt_gte?: Maybe<DateTimeInput>;
+  updateAt?: Maybe<DateTimeInput>;
+  updateAt_not?: Maybe<DateTimeInput>;
+  updateAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updateAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updateAt_lt?: Maybe<DateTimeInput>;
+  updateAt_lte?: Maybe<DateTimeInput>;
+  updateAt_gt?: Maybe<DateTimeInput>;
+  updateAt_gte?: Maybe<DateTimeInput>;
+  class?: Maybe<String>;
+  class_not?: Maybe<String>;
+  class_in?: Maybe<String[] | String>;
+  class_not_in?: Maybe<String[] | String>;
+  class_lt?: Maybe<String>;
+  class_lte?: Maybe<String>;
+  class_gt?: Maybe<String>;
+  class_gte?: Maybe<String>;
+  class_contains?: Maybe<String>;
+  class_not_contains?: Maybe<String>;
+  class_starts_with?: Maybe<String>;
+  class_not_starts_with?: Maybe<String>;
+  class_ends_with?: Maybe<String>;
+  class_not_ends_with?: Maybe<String>;
+  sex?: Maybe<String>;
+  sex_not?: Maybe<String>;
+  sex_in?: Maybe<String[] | String>;
+  sex_not_in?: Maybe<String[] | String>;
+  sex_lt?: Maybe<String>;
+  sex_lte?: Maybe<String>;
+  sex_gt?: Maybe<String>;
+  sex_gte?: Maybe<String>;
+  sex_contains?: Maybe<String>;
+  sex_not_contains?: Maybe<String>;
+  sex_starts_with?: Maybe<String>;
+  sex_not_starts_with?: Maybe<String>;
+  sex_ends_with?: Maybe<String>;
+  sex_not_ends_with?: Maybe<String>;
+  AND?: Maybe<PetWhereInput[] | PetWhereInput>;
+  OR?: Maybe<PetWhereInput[] | PetWhereInput>;
+  NOT?: Maybe<PetWhereInput[] | PetWhereInput>;
+}
+
+export interface TempCreateManyWithoutPetInput {
+  create?: Maybe<TempCreateWithoutPetInput[] | TempCreateWithoutPetInput>;
+  connect?: Maybe<TempWhereUniqueInput[] | TempWhereUniqueInput>;
+}
+
+export interface TempUpdateInput {
+  deviceName?: Maybe<String>;
+  pet?: Maybe<PetUpdateOneRequiredWithoutDeviceInput>;
+  Temp?: Maybe<Float>;
+}
+
+export interface TempCreateWithoutPetInput {
+  id?: Maybe<ID_Input>;
+  deviceName: String;
+  Temp: Float;
+}
+
+export interface PetUpdateManyMutationInput {
+  name?: Maybe<String>;
+  age?: Maybe<String>;
+  weight?: Maybe<String>;
+  height?: Maybe<String>;
+  species?: Maybe<String>;
+  deviceName?: Maybe<String>;
+  class?: Maybe<String>;
+  sex?: Maybe<String>;
+}
+
+export interface PetUpdateInput {
+  user?: Maybe<UserUpdateOneWithoutPetsInput>;
+  name?: Maybe<String>;
+  age?: Maybe<String>;
+  weight?: Maybe<String>;
+  height?: Maybe<String>;
+  species?: Maybe<String>;
+  device?: Maybe<TempUpdateManyWithoutPetInput>;
+  deviceName?: Maybe<String>;
+  class?: Maybe<String>;
+  sex?: Maybe<String>;
+}
+
+export interface TempSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<TempWhereInput>;
+  AND?: Maybe<TempSubscriptionWhereInput[] | TempSubscriptionWhereInput>;
+  OR?: Maybe<TempSubscriptionWhereInput[] | TempSubscriptionWhereInput>;
+  NOT?: Maybe<TempSubscriptionWhereInput[] | TempSubscriptionWhereInput>;
+}
+
+export interface UserUpdateOneWithoutPetsInput {
+  create?: Maybe<UserCreateWithoutPetsInput>;
+  update?: Maybe<UserUpdateWithoutPetsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutPetsInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateManyMutationInput {
+  avatar?: Maybe<String>;
+  username?: Maybe<String>;
+  password?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  loginSecret?: Maybe<String>;
+}
+
 export interface UserUpdateWithoutPetsDataInput {
   avatar?: Maybe<String>;
   username?: Maybe<String>;
@@ -787,9 +731,317 @@ export interface UserUpdateWithoutPetsDataInput {
   loginSecret?: Maybe<String>;
 }
 
+export type TempWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface UserUpsertWithoutPetsInput {
+  update: UserUpdateWithoutPetsDataInput;
+  create: UserCreateWithoutPetsInput;
+}
+
+export interface PetScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  age?: Maybe<String>;
+  age_not?: Maybe<String>;
+  age_in?: Maybe<String[] | String>;
+  age_not_in?: Maybe<String[] | String>;
+  age_lt?: Maybe<String>;
+  age_lte?: Maybe<String>;
+  age_gt?: Maybe<String>;
+  age_gte?: Maybe<String>;
+  age_contains?: Maybe<String>;
+  age_not_contains?: Maybe<String>;
+  age_starts_with?: Maybe<String>;
+  age_not_starts_with?: Maybe<String>;
+  age_ends_with?: Maybe<String>;
+  age_not_ends_with?: Maybe<String>;
+  weight?: Maybe<String>;
+  weight_not?: Maybe<String>;
+  weight_in?: Maybe<String[] | String>;
+  weight_not_in?: Maybe<String[] | String>;
+  weight_lt?: Maybe<String>;
+  weight_lte?: Maybe<String>;
+  weight_gt?: Maybe<String>;
+  weight_gte?: Maybe<String>;
+  weight_contains?: Maybe<String>;
+  weight_not_contains?: Maybe<String>;
+  weight_starts_with?: Maybe<String>;
+  weight_not_starts_with?: Maybe<String>;
+  weight_ends_with?: Maybe<String>;
+  weight_not_ends_with?: Maybe<String>;
+  height?: Maybe<String>;
+  height_not?: Maybe<String>;
+  height_in?: Maybe<String[] | String>;
+  height_not_in?: Maybe<String[] | String>;
+  height_lt?: Maybe<String>;
+  height_lte?: Maybe<String>;
+  height_gt?: Maybe<String>;
+  height_gte?: Maybe<String>;
+  height_contains?: Maybe<String>;
+  height_not_contains?: Maybe<String>;
+  height_starts_with?: Maybe<String>;
+  height_not_starts_with?: Maybe<String>;
+  height_ends_with?: Maybe<String>;
+  height_not_ends_with?: Maybe<String>;
+  species?: Maybe<String>;
+  species_not?: Maybe<String>;
+  species_in?: Maybe<String[] | String>;
+  species_not_in?: Maybe<String[] | String>;
+  species_lt?: Maybe<String>;
+  species_lte?: Maybe<String>;
+  species_gt?: Maybe<String>;
+  species_gte?: Maybe<String>;
+  species_contains?: Maybe<String>;
+  species_not_contains?: Maybe<String>;
+  species_starts_with?: Maybe<String>;
+  species_not_starts_with?: Maybe<String>;
+  species_ends_with?: Maybe<String>;
+  species_not_ends_with?: Maybe<String>;
+  deviceName?: Maybe<String>;
+  deviceName_not?: Maybe<String>;
+  deviceName_in?: Maybe<String[] | String>;
+  deviceName_not_in?: Maybe<String[] | String>;
+  deviceName_lt?: Maybe<String>;
+  deviceName_lte?: Maybe<String>;
+  deviceName_gt?: Maybe<String>;
+  deviceName_gte?: Maybe<String>;
+  deviceName_contains?: Maybe<String>;
+  deviceName_not_contains?: Maybe<String>;
+  deviceName_starts_with?: Maybe<String>;
+  deviceName_not_starts_with?: Maybe<String>;
+  deviceName_ends_with?: Maybe<String>;
+  deviceName_not_ends_with?: Maybe<String>;
+  createAt?: Maybe<DateTimeInput>;
+  createAt_not?: Maybe<DateTimeInput>;
+  createAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createAt_lt?: Maybe<DateTimeInput>;
+  createAt_lte?: Maybe<DateTimeInput>;
+  createAt_gt?: Maybe<DateTimeInput>;
+  createAt_gte?: Maybe<DateTimeInput>;
+  updateAt?: Maybe<DateTimeInput>;
+  updateAt_not?: Maybe<DateTimeInput>;
+  updateAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updateAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updateAt_lt?: Maybe<DateTimeInput>;
+  updateAt_lte?: Maybe<DateTimeInput>;
+  updateAt_gt?: Maybe<DateTimeInput>;
+  updateAt_gte?: Maybe<DateTimeInput>;
+  class?: Maybe<String>;
+  class_not?: Maybe<String>;
+  class_in?: Maybe<String[] | String>;
+  class_not_in?: Maybe<String[] | String>;
+  class_lt?: Maybe<String>;
+  class_lte?: Maybe<String>;
+  class_gt?: Maybe<String>;
+  class_gte?: Maybe<String>;
+  class_contains?: Maybe<String>;
+  class_not_contains?: Maybe<String>;
+  class_starts_with?: Maybe<String>;
+  class_not_starts_with?: Maybe<String>;
+  class_ends_with?: Maybe<String>;
+  class_not_ends_with?: Maybe<String>;
+  sex?: Maybe<String>;
+  sex_not?: Maybe<String>;
+  sex_in?: Maybe<String[] | String>;
+  sex_not_in?: Maybe<String[] | String>;
+  sex_lt?: Maybe<String>;
+  sex_lte?: Maybe<String>;
+  sex_gt?: Maybe<String>;
+  sex_gte?: Maybe<String>;
+  sex_contains?: Maybe<String>;
+  sex_not_contains?: Maybe<String>;
+  sex_starts_with?: Maybe<String>;
+  sex_not_starts_with?: Maybe<String>;
+  sex_ends_with?: Maybe<String>;
+  sex_not_ends_with?: Maybe<String>;
+  AND?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
+  OR?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
+  NOT?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
+}
+
+export interface TempUpdateManyWithoutPetInput {
+  create?: Maybe<TempCreateWithoutPetInput[] | TempCreateWithoutPetInput>;
+  delete?: Maybe<TempWhereUniqueInput[] | TempWhereUniqueInput>;
+  connect?: Maybe<TempWhereUniqueInput[] | TempWhereUniqueInput>;
+  set?: Maybe<TempWhereUniqueInput[] | TempWhereUniqueInput>;
+  disconnect?: Maybe<TempWhereUniqueInput[] | TempWhereUniqueInput>;
+  update?: Maybe<
+    | TempUpdateWithWhereUniqueWithoutPetInput[]
+    | TempUpdateWithWhereUniqueWithoutPetInput
+  >;
+  upsert?: Maybe<
+    | TempUpsertWithWhereUniqueWithoutPetInput[]
+    | TempUpsertWithWhereUniqueWithoutPetInput
+  >;
+  deleteMany?: Maybe<TempScalarWhereInput[] | TempScalarWhereInput>;
+  updateMany?: Maybe<
+    TempUpdateManyWithWhereNestedInput[] | TempUpdateManyWithWhereNestedInput
+  >;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  username?: Maybe<String>;
+  password?: Maybe<String>;
+  email?: Maybe<String>;
+}>;
+
+export interface PetCreateWithoutUserInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  age: String;
+  weight?: Maybe<String>;
+  height?: Maybe<String>;
+  species: String;
+  device?: Maybe<TempCreateManyWithoutPetInput>;
+  deviceName: String;
+  class?: Maybe<String>;
+  sex: String;
+}
+
+export interface PetUpdateWithWhereUniqueWithoutUserInput {
+  where: PetWhereUniqueInput;
+  data: PetUpdateWithoutUserDataInput;
+}
+
+export interface TempUpdateWithoutPetDataInput {
+  deviceName?: Maybe<String>;
+  Temp?: Maybe<Float>;
+}
+
+export interface UserUpdateInput {
+  avatar?: Maybe<String>;
+  username?: Maybe<String>;
+  password?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  loginSecret?: Maybe<String>;
+  pets?: Maybe<PetUpdateManyWithoutUserInput>;
+}
+
+export interface TempUpsertWithWhereUniqueWithoutPetInput {
+  where: TempWhereUniqueInput;
+  update: TempUpdateWithoutPetDataInput;
+  create: TempCreateWithoutPetInput;
+}
+
+export interface PetCreateInput {
+  id?: Maybe<ID_Input>;
+  user?: Maybe<UserCreateOneWithoutPetsInput>;
+  name: String;
+  age: String;
+  weight?: Maybe<String>;
+  height?: Maybe<String>;
+  species: String;
+  device?: Maybe<TempCreateManyWithoutPetInput>;
+  deviceName: String;
+  class?: Maybe<String>;
+  sex: String;
+}
+
+export interface PetCreateManyWithoutUserInput {
+  create?: Maybe<PetCreateWithoutUserInput[] | PetCreateWithoutUserInput>;
+  connect?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutPetsInput {
+  id?: Maybe<ID_Input>;
+  avatar?: Maybe<String>;
+  username: String;
+  password: String;
+  email: String;
+  name: String;
+  loginSecret?: Maybe<String>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  avatar?: Maybe<String>;
+  username: String;
+  password: String;
+  email: String;
+  name: String;
+  loginSecret?: Maybe<String>;
+  pets?: Maybe<PetCreateManyWithoutUserInput>;
+}
+
+export interface PetSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<PetWhereInput>;
+  AND?: Maybe<PetSubscriptionWhereInput[] | PetSubscriptionWhereInput>;
+  OR?: Maybe<PetSubscriptionWhereInput[] | PetSubscriptionWhereInput>;
+  NOT?: Maybe<PetSubscriptionWhereInput[] | PetSubscriptionWhereInput>;
+}
+
+export interface TempUpdateManyMutationInput {
+  deviceName?: Maybe<String>;
+  Temp?: Maybe<Float>;
+}
+
 export interface PetUpdateManyWithWhereNestedInput {
   where: PetScalarWhereInput;
   data: PetUpdateManyDataInput;
+}
+
+export interface PetUpsertWithoutDeviceInput {
+  update: PetUpdateWithoutDeviceDataInput;
+  create: PetCreateWithoutDeviceInput;
+}
+
+export interface PetUpdateWithoutUserDataInput {
+  name?: Maybe<String>;
+  age?: Maybe<String>;
+  weight?: Maybe<String>;
+  height?: Maybe<String>;
+  species?: Maybe<String>;
+  device?: Maybe<TempUpdateManyWithoutPetInput>;
+  deviceName?: Maybe<String>;
+  class?: Maybe<String>;
+  sex?: Maybe<String>;
+}
+
+export interface PetUpdateWithoutDeviceDataInput {
+  user?: Maybe<UserUpdateOneWithoutPetsInput>;
+  name?: Maybe<String>;
+  age?: Maybe<String>;
+  weight?: Maybe<String>;
+  height?: Maybe<String>;
+  species?: Maybe<String>;
+  deviceName?: Maybe<String>;
+  class?: Maybe<String>;
+  sex?: Maybe<String>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -803,23 +1055,79 @@ export interface UserSubscriptionWhereInput {
   NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
-export interface PetUpdateWithoutUserDataInput {
+export interface PetCreateWithoutDeviceInput {
+  id?: Maybe<ID_Input>;
+  user?: Maybe<UserCreateOneWithoutPetsInput>;
+  name: String;
+  age: String;
+  weight?: Maybe<String>;
+  height?: Maybe<String>;
+  species: String;
+  deviceName: String;
+  class?: Maybe<String>;
+  sex: String;
+}
+
+export interface PetCreateOneWithoutDeviceInput {
+  create?: Maybe<PetCreateWithoutDeviceInput>;
+  connect?: Maybe<PetWhereUniqueInput>;
+}
+
+export interface TempCreateInput {
+  id?: Maybe<ID_Input>;
+  deviceName: String;
+  pet: PetCreateOneWithoutDeviceInput;
+  Temp: Float;
+}
+
+export interface PetUpdateOneRequiredWithoutDeviceInput {
+  create?: Maybe<PetCreateWithoutDeviceInput>;
+  update?: Maybe<PetUpdateWithoutDeviceDataInput>;
+  upsert?: Maybe<PetUpsertWithoutDeviceInput>;
+  connect?: Maybe<PetWhereUniqueInput>;
+}
+
+export interface PetUpdateManyDataInput {
   name?: Maybe<String>;
   age?: Maybe<String>;
   weight?: Maybe<String>;
   height?: Maybe<String>;
   species?: Maybe<String>;
-  device?: Maybe<String>;
+  deviceName?: Maybe<String>;
   class?: Maybe<String>;
   sex?: Maybe<String>;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  username?: Maybe<String>;
-  password?: Maybe<String>;
-  email?: Maybe<String>;
-}>;
+export interface UserCreateOneWithoutPetsInput {
+  create?: Maybe<UserCreateWithoutPetsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface PetUpdateManyWithoutUserInput {
+  create?: Maybe<PetCreateWithoutUserInput[] | PetCreateWithoutUserInput>;
+  delete?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
+  connect?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
+  set?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
+  disconnect?: Maybe<PetWhereUniqueInput[] | PetWhereUniqueInput>;
+  update?: Maybe<
+    | PetUpdateWithWhereUniqueWithoutUserInput[]
+    | PetUpdateWithWhereUniqueWithoutUserInput
+  >;
+  upsert?: Maybe<
+    | PetUpsertWithWhereUniqueWithoutUserInput[]
+    | PetUpsertWithWhereUniqueWithoutUserInput
+  >;
+  deleteMany?: Maybe<PetScalarWhereInput[] | PetScalarWhereInput>;
+  updateMany?: Maybe<
+    PetUpdateManyWithWhereNestedInput[] | PetUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface PetUpsertWithWhereUniqueWithoutUserInput {
+  where: PetWhereUniqueInput;
+  update: PetUpdateWithoutUserDataInput;
+  create: PetCreateWithoutUserInput;
+}
 
 export interface NodeNode {
   id: ID_Output;
@@ -865,270 +1173,25 @@ export interface UserPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface Pet {
-  id: ID_Output;
-  name: String;
-  age: String;
-  weight?: String;
-  height?: String;
-  species: String;
-  device: String;
-  createAt: DateTimeOutput;
-  updateAt: DateTimeOutput;
-  class?: String;
-  sex: String;
-}
-
-export interface PetPromise extends Promise<Pet>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  user: <T = UserPromise>() => T;
-  name: () => Promise<String>;
-  age: () => Promise<String>;
-  weight: () => Promise<String>;
-  height: () => Promise<String>;
-  species: () => Promise<String>;
-  device: () => Promise<String>;
-  createAt: () => Promise<DateTimeOutput>;
-  updateAt: () => Promise<DateTimeOutput>;
-  class: () => Promise<String>;
-  sex: () => Promise<String>;
-}
-
-export interface PetSubscription
-  extends Promise<AsyncIterator<Pet>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  user: <T = UserSubscription>() => T;
-  name: () => Promise<AsyncIterator<String>>;
-  age: () => Promise<AsyncIterator<String>>;
-  weight: () => Promise<AsyncIterator<String>>;
-  height: () => Promise<AsyncIterator<String>>;
-  species: () => Promise<AsyncIterator<String>>;
-  device: () => Promise<AsyncIterator<String>>;
-  createAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updateAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  class: () => Promise<AsyncIterator<String>>;
-  sex: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PetNullablePromise extends Promise<Pet | null>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  user: <T = UserPromise>() => T;
-  name: () => Promise<String>;
-  age: () => Promise<String>;
-  weight: () => Promise<String>;
-  height: () => Promise<String>;
-  species: () => Promise<String>;
-  device: () => Promise<String>;
-  createAt: () => Promise<DateTimeOutput>;
-  updateAt: () => Promise<DateTimeOutput>;
-  class: () => Promise<String>;
-  sex: () => Promise<String>;
-}
-
-export interface PetSubscriptionPayload {
-  mutation: MutationType;
-  node: Pet;
-  updatedFields: String[];
-  previousValues: PetPreviousValues;
-}
-
-export interface PetSubscriptionPayloadPromise
-  extends Promise<PetSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = PetPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = PetPreviousValuesPromise>() => T;
-}
-
-export interface PetSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<PetSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = PetSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = PetPreviousValuesSubscription>() => T;
-}
-
-export interface AggregatePet {
-  count: Int;
-}
-
-export interface AggregatePetPromise
-  extends Promise<AggregatePet>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregatePetSubscription
-  extends Promise<AsyncIterator<AggregatePet>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PetEdge {
-  node: Pet;
-  cursor: String;
-}
-
-export interface PetEdgePromise extends Promise<PetEdge>, Fragmentable {
-  node: <T = PetPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface PetEdgeSubscription
-  extends Promise<AsyncIterator<PetEdge>>,
-    Fragmentable {
-  node: <T = PetSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface PetConnection {
+export interface TempConnection {
   pageInfo: PageInfo;
-  edges: PetEdge[];
+  edges: TempEdge[];
 }
 
-export interface PetConnectionPromise
-  extends Promise<PetConnection>,
+export interface TempConnectionPromise
+  extends Promise<TempConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<PetEdge>>() => T;
-  aggregate: <T = AggregatePetPromise>() => T;
+  edges: <T = FragmentableArray<TempEdge>>() => T;
+  aggregate: <T = AggregateTempPromise>() => T;
 }
 
-export interface PetConnectionSubscription
-  extends Promise<AsyncIterator<PetConnection>>,
+export interface TempConnectionSubscription
+  extends Promise<AsyncIterator<TempConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<PetEdgeSubscription>>>() => T;
-  aggregate: <T = AggregatePetSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PetPreviousValues {
-  id: ID_Output;
-  name: String;
-  age: String;
-  weight?: String;
-  height?: String;
-  species: String;
-  device: String;
-  createAt: DateTimeOutput;
-  updateAt: DateTimeOutput;
-  class?: String;
-  sex: String;
-}
-
-export interface PetPreviousValuesPromise
-  extends Promise<PetPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  age: () => Promise<String>;
-  weight: () => Promise<String>;
-  height: () => Promise<String>;
-  species: () => Promise<String>;
-  device: () => Promise<String>;
-  createAt: () => Promise<DateTimeOutput>;
-  updateAt: () => Promise<DateTimeOutput>;
-  class: () => Promise<String>;
-  sex: () => Promise<String>;
-}
-
-export interface PetPreviousValuesSubscription
-  extends Promise<AsyncIterator<PetPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  age: () => Promise<AsyncIterator<String>>;
-  weight: () => Promise<AsyncIterator<String>>;
-  height: () => Promise<AsyncIterator<String>>;
-  species: () => Promise<AsyncIterator<String>>;
-  device: () => Promise<AsyncIterator<String>>;
-  createAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updateAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  class: () => Promise<AsyncIterator<String>>;
-  sex: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  edges: <T = Promise<AsyncIterator<TempEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTempSubscription>() => T;
 }
 
 export interface User {
@@ -1210,6 +1273,194 @@ export interface UserNullablePromise
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
+export interface AggregatePet {
+  count: Int;
+}
+
+export interface AggregatePetPromise
+  extends Promise<AggregatePet>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePetSubscription
+  extends Promise<AsyncIterator<AggregatePet>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Temp {
+  id: ID_Output;
+  deviceName: String;
+  Temp: Float;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface TempPromise extends Promise<Temp>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  deviceName: () => Promise<String>;
+  pet: <T = PetPromise>() => T;
+  Temp: () => Promise<Float>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface TempSubscription
+  extends Promise<AsyncIterator<Temp>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  deviceName: () => Promise<AsyncIterator<String>>;
+  pet: <T = PetSubscription>() => T;
+  Temp: () => Promise<AsyncIterator<Float>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface TempNullablePromise
+  extends Promise<Temp | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  deviceName: () => Promise<String>;
+  pet: <T = PetPromise>() => T;
+  Temp: () => Promise<Float>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface TempEdge {
+  node: Temp;
+  cursor: String;
+}
+
+export interface TempEdgePromise extends Promise<TempEdge>, Fragmentable {
+  node: <T = TempPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface TempEdgeSubscription
+  extends Promise<AsyncIterator<TempEdge>>,
+    Fragmentable {
+  node: <T = TempSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PetPreviousValues {
+  id: ID_Output;
+  name: String;
+  age: String;
+  weight?: String;
+  height?: String;
+  species: String;
+  deviceName: String;
+  createAt: DateTimeOutput;
+  updateAt: DateTimeOutput;
+  class?: String;
+  sex: String;
+}
+
+export interface PetPreviousValuesPromise
+  extends Promise<PetPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  age: () => Promise<String>;
+  weight: () => Promise<String>;
+  height: () => Promise<String>;
+  species: () => Promise<String>;
+  deviceName: () => Promise<String>;
+  createAt: () => Promise<DateTimeOutput>;
+  updateAt: () => Promise<DateTimeOutput>;
+  class: () => Promise<String>;
+  sex: () => Promise<String>;
+}
+
+export interface PetPreviousValuesSubscription
+  extends Promise<AsyncIterator<PetPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  age: () => Promise<AsyncIterator<String>>;
+  weight: () => Promise<AsyncIterator<String>>;
+  height: () => Promise<AsyncIterator<String>>;
+  species: () => Promise<AsyncIterator<String>>;
+  deviceName: () => Promise<AsyncIterator<String>>;
+  createAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  class: () => Promise<AsyncIterator<String>>;
+  sex: () => Promise<AsyncIterator<String>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface PetEdge {
+  node: Pet;
+  cursor: String;
+}
+
+export interface PetEdgePromise extends Promise<PetEdge>, Fragmentable {
+  node: <T = PetPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PetEdgeSubscription
+  extends Promise<AsyncIterator<PetEdge>>,
+    Fragmentable {
+  node: <T = PetSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PetConnection {
+  pageInfo: PageInfo;
+  edges: PetEdge[];
+}
+
+export interface PetConnectionPromise
+  extends Promise<PetConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PetEdge>>() => T;
+  aggregate: <T = AggregatePetPromise>() => T;
+}
+
+export interface PetConnectionSubscription
+  extends Promise<AsyncIterator<PetConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PetEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePetSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface UserConnection {
   pageInfo: PageInfo;
   edges: UserEdge[];
@@ -1231,6 +1482,195 @@ export interface UserConnectionSubscription
   aggregate: <T = AggregateUserSubscription>() => T;
 }
 
+export interface PetSubscriptionPayload {
+  mutation: MutationType;
+  node: Pet;
+  updatedFields: String[];
+  previousValues: PetPreviousValues;
+}
+
+export interface PetSubscriptionPayloadPromise
+  extends Promise<PetSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PetPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PetPreviousValuesPromise>() => T;
+}
+
+export interface PetSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PetSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PetSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PetPreviousValuesSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface TempSubscriptionPayload {
+  mutation: MutationType;
+  node: Temp;
+  updatedFields: String[];
+  previousValues: TempPreviousValues;
+}
+
+export interface TempSubscriptionPayloadPromise
+  extends Promise<TempSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = TempPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = TempPreviousValuesPromise>() => T;
+}
+
+export interface TempSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TempSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = TempSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = TempPreviousValuesSubscription>() => T;
+}
+
+export interface TempPreviousValues {
+  id: ID_Output;
+  deviceName: String;
+  Temp: Float;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface TempPreviousValuesPromise
+  extends Promise<TempPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  deviceName: () => Promise<String>;
+  Temp: () => Promise<Float>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface TempPreviousValuesSubscription
+  extends Promise<AsyncIterator<TempPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  deviceName: () => Promise<AsyncIterator<String>>;
+  Temp: () => Promise<AsyncIterator<Float>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface Pet {
+  id: ID_Output;
+  name: String;
+  age: String;
+  weight?: String;
+  height?: String;
+  species: String;
+  deviceName: String;
+  createAt: DateTimeOutput;
+  updateAt: DateTimeOutput;
+  class?: String;
+  sex: String;
+}
+
+export interface PetPromise extends Promise<Pet>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  user: <T = UserPromise>() => T;
+  name: () => Promise<String>;
+  age: () => Promise<String>;
+  weight: () => Promise<String>;
+  height: () => Promise<String>;
+  species: () => Promise<String>;
+  device: <T = FragmentableArray<Temp>>(args?: {
+    where?: TempWhereInput;
+    orderBy?: TempOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  deviceName: () => Promise<String>;
+  createAt: () => Promise<DateTimeOutput>;
+  updateAt: () => Promise<DateTimeOutput>;
+  class: () => Promise<String>;
+  sex: () => Promise<String>;
+}
+
+export interface PetSubscription
+  extends Promise<AsyncIterator<Pet>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  user: <T = UserSubscription>() => T;
+  name: () => Promise<AsyncIterator<String>>;
+  age: () => Promise<AsyncIterator<String>>;
+  weight: () => Promise<AsyncIterator<String>>;
+  height: () => Promise<AsyncIterator<String>>;
+  species: () => Promise<AsyncIterator<String>>;
+  device: <T = Promise<AsyncIterator<TempSubscription>>>(args?: {
+    where?: TempWhereInput;
+    orderBy?: TempOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  deviceName: () => Promise<AsyncIterator<String>>;
+  createAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  class: () => Promise<AsyncIterator<String>>;
+  sex: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PetNullablePromise extends Promise<Pet | null>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  user: <T = UserPromise>() => T;
+  name: () => Promise<String>;
+  age: () => Promise<String>;
+  weight: () => Promise<String>;
+  height: () => Promise<String>;
+  species: () => Promise<String>;
+  device: <T = FragmentableArray<Temp>>(args?: {
+    where?: TempWhereInput;
+    orderBy?: TempOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  deviceName: () => Promise<String>;
+  createAt: () => Promise<DateTimeOutput>;
+  updateAt: () => Promise<DateTimeOutput>;
+  class: () => Promise<String>;
+  sex: () => Promise<String>;
+}
+
 export interface UserEdge {
   node: User;
   cursor: String;
@@ -1248,17 +1688,53 @@ export interface UserEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-/*
-DateTime scalar input type, allowing Date
-*/
-export type DateTimeInput = Date | string;
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
 
-/*
-DateTime scalar output type, which is always a string
-*/
-export type DateTimeOutput = string;
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateTemp {
+  count: Int;
+}
+
+export interface AggregateTempPromise
+  extends Promise<AggregateTemp>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateTempSubscription
+  extends Promise<AsyncIterator<AggregateTemp>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
 
 export type Long = string;
+
+/*
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
+*/
+export type Float = number;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -1270,6 +1746,16 @@ export type ID_Output = string;
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
@@ -1292,6 +1778,10 @@ export const models: Model[] = [
   },
   {
     name: "Pet",
+    embedded: false
+  },
+  {
+    name: "Temp",
     embedded: false
   }
 ];

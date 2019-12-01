@@ -5,7 +5,7 @@ type Mutation{
         species:String!,
         weight:String!,
         height:String!,
-        device:String!,
+        deviceName:String!,
         sex:String!,
 
     ):Boolean! 

@@ -18,10 +18,21 @@ type Pet{
   age: String!
   weight:String
   height:String
-  device:String! 
+  device:[Pet!]! 
+  deviceName:String!
   species:String! 
   createdAt:String
   updatedAt:String
   class:String
   sex:String!
+}
+
+
+type Temp{
+  id:ID!
+  pets:Pet
+  Temp:Float!
+  deviceName:String!
+  createdAt: String
+  updatedAt: String
 }

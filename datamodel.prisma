@@ -19,10 +19,19 @@ type Pet{
   weight:String
   height:String
   species:String! @unique
-  device:String! 
+  device:[Temp!]! @relation(name:"TempOfPet", onDelete:CASCADE)
+  deviceName:String! @unique
   createAt:DateTime! @createdAt
   updateAt:DateTime! @updatedAt
   class:String
   sex:String!
-  
+}
+type Temp{
+  id:ID! @id
+  deviceName:String!
+  pet:Pet! @relation(name:"TempOfPet")
+  Temp:Float! 
+  createdAt:DateTime! @createdAt
+  updatedAt:DateTime! @updatedAt  
+
 }
