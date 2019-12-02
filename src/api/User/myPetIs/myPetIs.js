@@ -5,10 +5,10 @@ export default{
     Query:{
         myPetIs:async(_,__,{request})=>{
             isAuthenticated(request);
-            const {user} = request;
+            const {user:{id} = request;
             try{
                 const result = await prisma.$exists.pet({user:{
-                    id:"1234"
+                    id:id
                 }});
                 if(result === true){
                     return true;
