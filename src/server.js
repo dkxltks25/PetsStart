@@ -35,9 +35,6 @@ server.express.get("/api",async (req,res)=>{
         const {id} = findPet[0];
         const [_,deviceName] = QueryKeyValue[0];
         const [__,Temp] = QueryKeyValue[1];
-        console.log(deviceName);
-        console.log(Temp);
-        
         try{
             const result = await prisma.createTemp({
                 Temp:parseFloat(Temp),
@@ -58,5 +55,23 @@ server.express.get("/api",async (req,res)=>{
     }catch{
         res.send("잘못된 접근입니다 -Park");
     }
+
+});
+
+server.express.get("/getData",async(req,res)=>{
+    try{
+        const parsedObject = url.parse(req.url);
+        const {query} = parsedObject;
+        const QueryArray = query.split("&");
+        const QueryKeyValue = [];
+        QueryArray.map((index)=>{
+            QueryKeyValue.push(index.split("="));
+        })
+        const findPet = await prisma.temps({where:{deviceName:QueryKeyValue[1]}});
+        res.send(findPet);
+    }catch(e){
+        res.send(e);
+    }
+    
 
 })
